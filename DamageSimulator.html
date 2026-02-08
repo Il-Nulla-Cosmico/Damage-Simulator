@@ -205,16 +205,26 @@
         let dannoReale = currentScore / nFrutti;
         
         let html = `<table><tr><th>A_Classes</th><th>B_n.Fruits</th><th>AxB</th></tr>`;
-        classiFull.forEach(c => {
-            let style = classiAmmesse.includes(c) ? "" : "color:#ccc;"; 
-            let val = counts[c];
-            let prod = val * c;
-            html += `<tr style="${style}">
-                <td>${c}</td>
-                <td>${val > 0 ? val : '-'}</td>
-                <td>${prod > 0 ? prod : '-'}</td>
-            </tr>`;
-        });
+
+classiFull.forEach(c => {
+    // 1. Gestione sicura di undefined
+    let val = counts[c] || 0; 
+    
+    // 2. Calcolo sicuro (conversione in numero per sicurezza)
+    let prod = val * Number(c); 
+
+    // Stile condizionale
+    let style = classiAmmesse.includes(c) ? "" : "color:#ccc;"; 
+
+    html += `<tr style="${style}">
+        <td>${c}</td>
+        <td>${val > 0 ? val : '-'}</td>
+        <td>${(prod > 0 && !isNaN(prod)) ? prod : '-'}</td>
+    </tr>`;
+});
+
+// 3. Chiusura fondamentale del tag table
+html += `</table>`;
         
         // --- RIGA TOTALI (NUOVA) ---
         html += `<tr class="row-total">
